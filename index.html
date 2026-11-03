@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#17243a">
+<title>SIX YEARS — 8-BIT SCHOOL LIFE</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+:root{--navy:#17243a;--blue:#284a70;--sky:#b9d8e8;--cream:#f7f0d8;--paper:#fff9e9;--ink:#253044;--muted:#6c7480;--red:#d95d59;--green:#5d9a70;--yellow:#e7b94f;--line:#26364b;--shadow:5px 5px 0 #17243a}
+*{box-sizing:border-box}body{margin:0;background:#b8d4df;color:var(--ink);font-family:'Noto Sans TC',sans-serif;font-size:14px;line-height:1.55;background-image:linear-gradient(45deg,rgba(255,255,255,.23) 25%,transparent 25%),linear-gradient(-45deg,rgba(255,255,255,.23) 25%,transparent 25%);background-size:16px 16px}
+button,input,select{font:inherit}button{border:3px solid var(--line);border-radius:0;background:var(--cream);color:var(--ink);padding:10px 12px;box-shadow:3px 3px 0 var(--line);font-weight:900;cursor:pointer;transition:transform .08s,box-shadow .08s}button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}button:disabled{opacity:.4;cursor:not-allowed}.primary{background:var(--yellow)}.danger{background:#f3c2b8}.small{font-size:11px;padding:7px 9px}.pixel{font-family:'Press Start 2P',monospace;letter-spacing:-.06em}.wrap{max-width:1200px;margin:auto;padding:14px}.top{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--navy);color:white;border:4px solid #0d1727;padding:13px 15px;box-shadow:var(--shadow);margin-bottom:13px}.logo{font-family:'Press Start 2P',monospace;font-size:19px;color:#ffe28a;text-shadow:3px 3px #a84c46}.subtitle{font-size:10px;letter-spacing:.13em;color:#c6d8e7;margin-top:7px}.datebox{text-align:right;font-weight:900;font-size:14px}.datebox small{display:block;color:#c5d8e6;font-weight:500}.grid{display:grid;grid-template-columns:250px minmax(0,1fr) 245px;gap:13px}.panel{background:var(--paper);border:4px solid var(--line);box-shadow:var(--shadow);padding:13px;min-width:0}.panel h2{font-size:13px;margin:0 0 11px;color:var(--blue);letter-spacing:.04em}.profile{display:flex;align-items:center;gap:10px;margin-bottom:12px}.avatar{width:58px;height:58px;border:3px solid var(--line);background:#b9d8e8;display:grid;place-items:center;font-size:30px;box-shadow:3px 3px 0 #8daebd}.name{font-weight:900;font-size:16px}.muted{color:var(--muted);font-size:11px}.tag{display:inline-block;background:#d9e8e8;border:2px solid #607d8d;padding:2px 6px;margin:3px 3px 0 0;font-size:10px;font-weight:900}.stat{margin:10px 0}.statline{display:flex;justify-content:space-between;font-size:11px;font-weight:900;margin-bottom:4px}.bar{height:12px;border:2px solid var(--line);background:#d8d8c9}.fill{height:100%;background:#5d9a70;image-rendering:pixelated}.fill.warn{background:#e7b94f}.fill.bad{background:#d95d59}.event{border:3px solid var(--line);background:#fffdf2;padding:13px;min-height:185px;box-shadow:inset 0 0 0 3px #eee3c5}.eventtime{font-size:10px;color:#697888;font-weight:900}.event h3{margin:6px 0;font-size:18px;color:#203d5d}.event p{margin:6px 0;color:#404c5d}.choices{display:grid;gap:8px;margin-top:12px}.choices button{text-align:left;background:#e4eef0}.choices button b{display:inline-grid;place-items:center;width:23px;height:23px;background:var(--yellow);border:2px solid var(--line);margin-right:8px}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.actions button{font-size:12px;min-height:58px;background:#e5edf0}.actions button span{display:block;font-size:20px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.tab{background:#d4e5e9}.tab.active{background:var(--yellow)}.feed{max-height:320px;overflow:auto}.log{border-bottom:2px dashed #c8c4ae;padding:8px 0;font-size:11px}.log time{display:block;font-size:9px;color:#74808b;font-weight:900}.kv{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #c8c4ae;font-size:11px}.section{margin-top:15px;padding-top:12px;border-top:3px dashed #c8c4ae}.notice{font-size:10px;color:#6f7780;margin-top:10px}.setup{max-width:650px;margin:5vh auto;background:var(--paper);border:5px solid var(--line);box-shadow:8px 8px 0 var(--navy);padding:22px}.setup h1{font-size:22px;margin:16px 0 5px}.setup p{color:#5e6876}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:900;color:#536477}input,select{width:100%;padding:11px;border:3px solid var(--line);border-radius:0;background:#fffdf2;color:var(--ink)}.foot{font-size:10px;color:#68727d;margin-top:15px}.hidden{display:none!important}.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;border:3px solid #fff;padding:10px 14px;z-index:10;font-size:12px;box-shadow:4px 4px 0 #000;max-width:90%;text-align:center}.pixel-scene{height:94px;border:3px solid var(--line);margin-bottom:12px;position:relative;overflow:hidden;background:linear-gradient(#7db6d3 0 62%,#83a86d 62% 100%);image-rendering:pixelated}.sun{position:absolute;width:25px;height:25px;background:#ffe18a;right:30px;top:14px;box-shadow:0 0 0 5px rgba(255,225,138,.25)}.school{position:absolute;left:14%;bottom:0;width:54%;height:65px;background:#e8d9b5;border:4px solid #394a5b;clip-path:polygon(0 20%,50% 0,100% 20%,100% 100%,0 100%)}.school:before{content:"";position:absolute;left:10%;right:10%;top:24px;height:10px;background:#6f91a4;box-shadow:0 18px #6f91a4}.school:after{content:"";position:absolute;left:45%;bottom:0;width:20px;height:28px;background:#9c6650}.cloud{position:absolute;left:12%;top:17px;width:35px;height:10px;background:#fff;box-shadow:9px -6px 0 #fff,18px 0 0 #fff}.pixel-avatar{display:inline-block;font-size:24px;filter:contrast(1.1);image-rendering:pixelated}.roster{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.person{border:2px solid var(--line);padding:8px;background:#f5edda;font-size:11px}.person b{display:block}.modal{position:fixed;inset:0;background:#101b2bd9;display:grid;place-items:center;padding:15px;z-index:5}.modalbox{max-width:560px;width:100%;max-height:85vh;overflow:auto;background:var(--paper);border:5px solid var(--line);box-shadow:8px 8px 0 #000;padding:17px}.modalbox h2{margin-top:0}.ending{font-size:12px;line-height:1.8;background:#e8efdf;border:3px solid var(--line);padding:12px}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.mainpanel{grid-column:1/-1;grid-row:1}.leftpanel{grid-column:1}.rightpanel{grid-column:2}}
+@media(max-width:600px){.wrap{padding:9px}.top{padding:10px;align-items:flex-start}.logo{font-size:15px}.datebox{font-size:11px}.grid{grid-template-columns:1fr}.mainpanel,.leftpanel,.rightpanel{grid-column:1;grid-row:auto}.mainpanel{grid-row:1}.setup{margin:2vh 9px;padding:16px}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.actions{grid-template-columns:repeat(2,1fr)}.panel{padding:11px}.roster{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div id="setup" class="setup">
+ <div class="logo">SIX YEARS</div><div class="subtitle">8-BIT HONG KONG SCHOOL LIFE RPG · COMPLETE EDITION</div>
+ <div class="pixel-scene"><div class="sun"></div><div class="cloud"></div><div class="school"></div></div>
+ <h1>你的六年中學生涯，即將開始。</h1>
+ <p>2012年9月｜仁濟醫院王華湘中學｜中一新生</p>
+ <div class="formgrid">
+  <div class="field full"><label>角色名稱</label><input id="playerName" maxlength="16" placeholder="輸入角色全名"></div>
+  <div class="field"><label>性別</label><select id="gender"><option>男</option><option>女</option><option>其他／不設定</option></select></div>
+  <div class="field"><label>出生日期</label><input id="birthday" type="date" value="2000-06-15" min="1999-01-01" max="2001-12-31"></div>
+  <div class="field full"><div class="muted">一般角色：系統隨機生成入學試分數及排名，按排名分配A／B／C／D班。若輸入彩蛋角色完整姓名，會自動載入該角色設定及專屬模式。</div></div>
+  <div class="field full"><button class="primary" id="startBtn">▶ 開始六年人生</button></div>
+ </div>
+ <div class="foot">8-bit像素風介面。學校日常、校曆與事件為遊戲化重建；角色劇情為模擬設定，並非學校官方紀錄。</div>
+</div>
+
+<div id="game" class="wrap hidden">
+ <header class="top"><div><div class="logo">SIX YEARS</div><div class="subtitle">HK SCHOOL LIFE SIMULATOR · 2012—2018</div></div><div class="datebox"><span id="dateLabel">2012年9月3日</span><small id="yearLabel">中一 · 上學期</small></div></header>
+ <div class="grid">
+  <aside class="panel leftpanel">
+   <div class="profile"><div class="avatar" id="avatar">🎒</div><div><div class="name" id="profileName">學生</div><div class="muted" id="profileClass">中一 A班</div><span class="tag" id="houseTag">仁社</span><span class="tag" id="modeTag">自由模式</span></div></div>
+   <h2>PLAYER STATUS</h2><div id="stats"></div>
+   <div class="section"><h2>學業及校園</h2><div class="kv"><span>入學排名</span><b id="rankText">—</b></div><div class="kv"><span>學年平均</span><b id="gradeText">50</b></div><div class="kv"><span>社際積分</span><b id="housePoints">0</b></div><div class="kv"><span>紀律紀錄</span><b id="disciplineText">0</b></div></div>
+   <div class="notice">狀態及選擇會影響事件結果。健康、情緒及紀律亦會影響六年結局。</div>
+  </aside>
+  <main class="panel mainpanel">
+   <div class="centerhead" style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">校園生活 / CAMPUS</h2><span class="tag" id="weekdayTag">上課日</span></div>
+   <div class="pixel-scene"><div class="sun"></div><div class="cloud"></div><div class="school"></div></div>
+   <div id="currentEvent" class="event"></div>
+   <div class="tabs"><button class="tab active" data-tab="actions">今日行動</button><button class="tab" data-tab="people">人物名冊</button><button class="tab" data-tab="calendar">學校行事曆</button><button class="tab" data-tab="record">六年紀錄</button></div>
+   <div id="tab-actions">
+    <div class="statline"><span>今日行動點數</span><b id="apText">3 / 3</b></div>
+    <div class="actions" id="actionButtons">
+     <button data-action="study"><span>📚</span>溫習</button><button data-action="homework"><span>✏️</span>做功課</button><button data-action="social"><span>💬</span>找同學聊天</button><button data-action="sport"><span>🏀</span>運動</button><button data-action="club"><span>🎭</span>參加學會</button><button data-action="rest"><span>☕</span>休息</button><button data-action="parttime"><span>💵</span>兼職／賺零用</button><button data-action="tutor"><span>📝</span>補習</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="primary" id="nextDay">結束今天 ▶</button><button id="saveBtn">💾 儲存</button><button id="loadBtn">載入進度</button><button class="danger" id="resetBtn">重新開始</button></div>
+   </div>
+   <div id="tab-people" class="hidden"><h2>同學及主要人物</h2><div class="roster" id="roster"></div><p class="notice">NPC會按班別、朋友圈及事件出現。彩蛋角色只有以完整姓名創立角色時才會進入專屬模式。</p></div>
+   <div id="tab-calendar" class="hidden"><h2>學年活動安排</h2><div id="calendarList"></div></div>
+   <div id="tab-record" class="hidden"><h2>六年人生紀錄</h2><div id="yearbook"></div></div>
+  </main>
+  <aside class="panel rightpanel">
+   <h2>校園資料 / SCHOOL</h2>
+   <div class="kv"><span>年級</span><b id="gradeLevel">中一</b></div><div class="kv"><span>班別</span><b id="classLevel">A班</b></div><div class="kv"><span>性別</span><b id="genderLevel">男</b></div><div class="kv"><span>所屬社</span><b id="houseLevel">仁社</b></div><div class="kv"><span>模式</span><b id="modeLevel">自由</b></div>
+   <div class="section"><h2>人生紀錄 / LOG</h2><div class="feed" id="feed"></div></div>
+   <div class="section"><h2>金錢</h2><div class="kv"><span>零用錢</span><b id="moneyText">$500</b></div><div class="kv"><span>學業科目</span><b id="subjectsText">中學課程</b></div></div>
+  </aside>
+ </div>
+ <div class="foot" style="text-align:center">SIX YEARS · 8-BIT COMPLETE EDITION · 2012—2018 · 遊戲模擬作品</div>
+</div>
+<div id="modal" class="modal hidden"><div class="modalbox"><div id="modalContent"></div><button id="modalClose" class="primary">返回遊戲</button></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+const $=id=>document.getElementById(id), houses=['仁社','義社','禮社','智社'];
+const cameo={
+'張柏添':{id:'SC017',gender:'男',initial:'D',rule:'D',desc:'D班傳奇人物；鬼點子多，喜歡改花名、打機及創作搞笑歌曲。'},
+'勞頌銘':{id:'SC018',gender:'男',initial:'C',rule:'neverD',desc:'Hip-hop愛好者，英文能力好，參與英文活動；南路成員。'},
+'馬俊翔':{id:'SC019',gender:'男',initial:'C',rule:'BC',desc:'曼聯球迷，喜歡發表偉論，脾氣較火爆。'},
+'鄔澤輝':{id:'SC023',gender:'男',initial:'C',rule:'C',desc:'長年C班，南路創辦人，常跟隨朋友行動。'},
+'鄭柏軒':{id:'SC024',gender:'男',initial:'B',rule:'DfromF4',desc:'阿仙奴球迷，足球學會成員；高中長駐D班。'},
+'卓頌賢':{id:'SC025',gender:'男',initial:'C',rule:'DfromF4',desc:'車路士球迷，南路創辦人，行動派。'},
+'黃子聰':{id:'SC026',gender:'男',initial:'D',rule:'D',desc:'長年D班；初中較被動，高中逐漸變得主動。'},
+'黎其盛':{id:'SC027',gender:'男',initial:'C',rule:'BC',desc:'南路創辦人，成績中上，安靜低調。'},
+'羅志恆':{id:'SC028',gender:'男',initial:'C',rule:'BC',desc:'南路創辦人，綽號小豬，認真穩定。'},
+'朱紹勤':{id:'SC029',gender:'男',initial:'C',rule:'BCD',desc:'南路成員，性格荒誕，經常陪笑。'}
+};
+const npc=[
+{name:'鄭量文',cls:'A',desc:'A班主要人物；專注讀書及文科活動。'},
+{name:'鄭寶希',cls:'A',desc:'A班主要人物；專注讀書及文科活動。'},
+{name:'陳亮',cls:'A',desc:'A班主要人物；專注讀書及文科活動。'},
+{name:'蕭曉陽',cls:'C',desc:'長年C班核心，手球、籃球及田徑好手，風頭人物。'},
+{name:'高浩龍',cls:'D',desc:'D班NPC，行動派，數學能力突出，喜歡玩。'},
+{name:'勞子強',cls:'D',desc:'D班NPC，前線行動派，性格衝動。'},
+{name:'蔡傑軒',cls:'D',desc:'D班NPC，張柏添好友及歌曲創作搭檔。'},
+{name:'吳子龍',cls:'C',desc:'長年C班，性格隨和，曾是南路成員。'},
+{name:'高進富',cls:'D',desc:'中一C班，高中長駐D班；陸運會長年全場冠軍。'}
+];
+const events={
+welcome:{title:'中一新生開學日',body:'你第一次走進王華湘中學。走廊上滿是新面孔，班主任正在課室等候新同學。你會怎樣開始這一天？',choices:[['主動向旁邊同學打招呼','social',8],['安靜找座位，先觀察環境','mood',4],['詢問班主任今日安排','study',3]]},
+f1box:{title:'課室衝突',body:'中一期間，蔡傑軒與張柏添發生嚴重衝突，事件涉及𠝹刀傷害。老師及校方介入處理，兩人需要面對紀律後果及後續修復關係。你會怎樣看待這件事？',choices:[['向老師反映並支持校方處理','discipline',1],['勸同學不要再擴大衝突','social',5],['遠離衝突，先照顧自己','health',3]]},
+f1crisis:{title:'同學情緒危機',body:'你得知勞頌銘近期情緒狀態不穩，曾在校內出現危機。校方及社工正在提供支援。這不是玩笑，也不是同學可以獨自承擔的事。',choices:[['鼓勵他尋求社工及成人協助','social',5],['通知可信任老師','discipline',0],['保持尊重，不散播傳聞','mood',3]]},
+f4drill:{title:'校園安全事件',body:'勞頌銘與鄔澤輝發生爭執後，曾帶電鑽回校並表達攻擊意圖，事件在造成傷害前被通報。校方須進行安全處理、調查及支援。',choices:[['支持校方先確保所有人安全','discipline',1],['提醒同學不要傳播未證實消息','social',4],['向社工或老師尋求協助','mood',3]]},
+f5book:{title:'違規物品事件',body:'中五時，卓頌賢發起帶色情書籍回校的事件，張柏添參與，勞頌銘提供部分資金。校方介入並作出紀律處理。',choices:[['不參與並提醒同學守校規','discipline',0],['離開現場避免捲入事件','health',2],['事後向老師了解處理安排','study',2]]},
+f5chair:{title:'訓導室衝突',body:'在後續與訓導老師的衝突中，卓頌賢掟椅，事件造成安全風險並帶來進一步紀律後果。',choices:[['保持距離，避免衝突升級','health',3],['支持老師按程序處理','discipline',1],['事後關心受影響同學','social',4]]},
+f6mock:{title:'校外模擬考試',body:'校外模擬考試期間，吳子龍遇上尷尬的生理反應，成為同學之間的話題。尊重別人私隱，不以身體或外貌羞辱任何人。',choices:[['不加入取笑，轉移話題','social',5],['提醒朋友尊重私隱','mood',4],['專心準備自己的考試','study',3]]}
+};
+let s=null;
+function cl(rank){return rank<=30?'A':rank<=60?'B':rank<=90?'C':'D'}
+function yr(){return Math.max(1,Math.min(6,s.date.getFullYear()-2012+(s.date.getMonth()>=8?1:0)))}
+function weekday(d){return ['日','一','二','三','四','五','六'][d.getDay()]}
+function dt(d=s.date){return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${weekday(d)}`}
+function toast(t){let e=$('toast');e.textContent=t;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),1800)}
+function log(t){s.logs.unshift({date:dt(),text:t});s.logs=s.logs.slice(0,60);renderLogs()}
+function randomHouse(){return houses[Math.floor(Math.random()*4)]}
+function rankFor(c){let a={A:[1,30],B:[31,60],C:[61,90],D:[91,120]}[c];return a[0]+Math.floor(Math.random()*30)}
+function start(){
+ const name=$('playerName').value.trim();if(!name){toast('請輸入角色姓名');return}
+ const birthday=$('birthday').value||'2000-06-15';const special=cameo[name]||null;
+ let rank=1+Math.floor(Math.random()*120),initial=special?special.initial:cl(rank);
+ if(special)rank=rankFor(initial);
+ const gender=special?special.gender:$('gender').value;
+ s={name,gender,birthday,rank,initial,cls:initial,house:randomHouse(),date:new Date(2012,8,3),ap:3,maxAP:3,stats:{study:50,health:82,mood:72,social:35,discipline:0},grade:50,money:500,housePoints:0,logs:[],mode:special?'彩蛋模式':'自由模式',cameo:special?.id||null,rule:special?.rule||null,desc:special?.desc||'',actions:0,yearHistory:[],flags:{},subjects:['中文','英文','數學','通識教育'],dse:{},dayCount:0};
+ $('setup').classList.add('hidden');$('game').classList.remove('hidden');
+ log('你正式成為仁濟醫院王華湘中學的中一新生。');
+ log(special?`姓名完全符合${special.id}｜${name}，自動進入彩蛋模式。`:`系統隨機生成入學試排名第${rank}，分配至中一${initial}班。`);
+ log(`性別：${gender}；所屬社別：${s.house}。`);
+ if(special)log(`角色設定：${special.desc}`);
+ log('新學年開始：2012年9月3日。');
+ showEvent('welcome');render();buildCalendar();renderPeople();renderYearbook();
+}
+function render(){
+ let y=yr(),d=s.date;
+ $('dateLabel').textContent=dt();$('yearLabel').textContent=`中${y} · ${d.getMonth()+1>=9?'上學期':'下學期'}`;
+ $('profileName').textContent=s.name;$('profileClass').textContent=`中${y} ${s.cls}班`;$('houseTag').textContent=s.house;$('modeTag').textContent=s.mode;$('rankText').textContent=`第${s.rank}名`;
+ $('gradeText').textContent=Math.round(s.grade);$('housePoints').textContent=s.housePoints;$('disciplineText').textContent=s.stats.discipline;
+ $('gradeLevel').textContent=`中${y}`;$('classLevel').textContent=s.cls+'班';$('genderLevel').textContent=s.gender;$('houseLevel').textContent=s.house;$('modeLevel').textContent=s.mode;
+ $('moneyText').textContent='$'+s.money;$('apText').textContent=`${s.ap} / ${s.maxAP}`;$('weekdayTag').textContent=[0,6].includes(d.getDay())?'假日':'上課日';
+ const labels={study:'學業能力',health:'健康',mood:'情緒狀態',social:'人際關係',discipline:'紀律紀錄'};
+ $('stats').innerHTML=Object.entries(labels).map(([k,label])=>{let v=s.stats[k],pct=k==='discipline'?Math.min(100,v*14):v,clsx=k==='discipline'?(v>=5?'bad':v>=2?'warn':''):(v<35?'bad':v<60?'warn':'');return `<div class="stat"><div class="statline"><span>${label}</span><b>${k==='discipline'?v:v+'/100'}</b></div><div class="bar"><div class="fill ${clsx}" style="width:${pct}%"></div></div></div>`}).join('');
+ $('actionButtons').querySelectorAll('button').forEach(b=>b.disabled=s.ap<=0);
+}
+function renderLogs(){$('feed').innerHTML=s.logs.map(x=>`<div class="log"><time>${x.date}</time>${x.text}</div>`).join('')}
+function showEvent(key){
+ let ev=events[key];if(!ev){$('currentEvent').innerHTML=`<div class="eventtime">${dt()}</div><h3>平常校園日</h3><p>課堂、午飯、同學聊天，校園生活仍在繼續。你可以安排今天的行動。</p>`;return}
+ $('currentEvent').innerHTML=`<div class="eventtime">${dt()} · 校園事件</div><h3>${ev.title}</h3><p>${ev.body}</p><div class="choices">${ev.choices.map((c,i)=>`<button data-evchoice="${i}"><b>${'ABCD'[i]}</b>${c[0]}</button>`).join('')}</div>`;
+ $('currentEvent').dataset.event=key;
+}
+function resolveEvent(i){
+ let key=$('currentEvent').dataset.event,ev=events[key];if(!ev)return;
+ let c=ev.choices[i],k=c[1],v=c[2];
+ if(k==='discipline')s.stats.discipline=Math.max(0,s.stats.discipline+v);
+ else s.stats[k]=Math.max(0,Math.min(100,s.stats[k]+v));
+ log(`事件「${ev.title}」：${c[0]}。`);$('currentEvent').dataset.event='';showEvent('normal');render();
+}
+function action(a){
+ if(s.ap<=0)return;
+ const map={
+ study:['你安排了一段專注溫習時間。',{study:5,mood:-2},0],
+ homework:['你完成當日功課，鞏固課堂內容。',{study:3,discipline:0},0],
+ social:['你與同學聊天，了解彼此近況。',{social:6,mood:3},-15],
+ sport:['你參加運動，身體及精神狀態改善。',{health:6,mood:4},0],
+ club:['你參加學會或課外活動，認識不同班別同學。',{social:4,mood:4},0],
+ rest:['你休息一會，恢復體力及心情。',{health:6,mood:6},0],
+ parttime:['你做了一點兼職／幫忙工作，賺取零用錢。',{health:-3,mood:1},80],
+ tutor:['你安排補習，學業能力提升，但需要支付費用。',{study:7,mood:-3},-100]
+ };
+ let [msg,delta,cash]=map[a];if(a==='tutor'&&s.money<100){toast('零用錢不足');return}
+ for(let k in delta){if(k==='discipline')s.stats[k]+=delta[k];else s.stats[k]=Math.max(0,Math.min(100,s.stats[k]+delta[k]))}
+ s.money=Math.max(0,s.money+cash);s.ap--;s.actions++;s.grade=Math.max(0,Math.min(100,s.grade+(delta.study||0)*.35));
+ log(msg);render();
+}
+function nextDay(){
+ if(s.ap>0&&!confirm(`今日還有${s.ap}點行動，仍要結束今天？`))return;
+ s.date.setDate(s.date.getDate()+1);s.dayCount++;s.ap=s.maxAP;
+ s.stats.health=Math.min(100,s.stats.health+2);s.stats.mood=Math.min(100,s.stats.mood+1);
+ if(s.date.getDate()===1){
+  const m=s.date.getMonth()+1;
+  const monthly={9:'新學年開始，班級及校園生活重新展開。',10:'學會招募及社際活動陸續展開。',11:'測驗及校內活動增加，記得安排溫習。',12:'聖誕活動及上學期考試將至。',1:'下學期開始，檢視自己的學習進度。',2:'農曆新年假期前後，留意家庭及朋友活動。',3:'球類比賽及陸運會活動逐漸增加。',4:'復活節假期及考試準備時間。',5:'年終考試及校內活動密集。',6:'年終考試、畢業活動及學年總結。',7:'成績檢討及暑假開始。'};
+  if(monthly[m])log(monthly[m]);
+ }
+ fixedEvents();
+ if(s.date.getMonth()===8&&s.date.getDate()===1&&s.date.getFullYear()>2012)promote();
+ if(s.date.getFullYear()===2018&&s.date.getMonth()===6&&s.date.getDate()===11)showDSEnd();
+ if(s.date.getFullYear()===2018&&s.date.getMonth()===6&&s.date.getDate()===12)showEnding();
+ if(s.dayCount%7===0)randomEvent();
+ render();
+}
+function fixedEvents(){
+ let y=s.date.getFullYear(),m=s.date.getMonth()+1,d=s.date.getDate(),f=yr();
+ const dateKey=`${y}-${m}-${d}`;
+ const fixed={
+ '2013-3-15':['f1box','中一同學衝突事件'],
+ '2013-5-8':['f1crisis','同學情緒支援事件'],
+ '2016-10-14':['f4drill','校園安全事件'],
+ '2017-2-17':['f5book','違規物品事件'],
+ '2017-2-24':['f5chair','訓導室衝突'],
+ '2018-3-21':['f6mock','校外模擬考試事件']
+ };
+ if(fixed[dateKey]){let [key,label]=fixed[dateKey];log(`觸發重要事件：${label}。`);showEvent(key)}
+ if(m===6&&d===30&&y>=2013&&y<=2017){s.yearHistory.push({year:y,grade:Math.round(s.grade),cls:s.cls,housePoints:s.housePoints});log(`中${f}學年結束，年度平均表現為${Math.round(s.grade)}。`);s.grade=Math.round((s.grade+50)/2);s.housePoints=0;renderYearbook()}
+ if(y===2018&&m===4&&d===9)log('2018年DSE中文科筆試開始。');
+ if(y===2018&&m===4&&d===13)log('2018年DSE英文科筆試。');
+ if(y===2018&&m===4&&d===16)log('2018年DSE數學必修部分筆試。');
+}
+function promote(){
+ let newY=yr();
+ if(newY>6)return;
+ if(s.mode==='彩蛋模式'){
+  if(s.rule==='D')s.cls='D';else if(s.rule==='C')s.cls='C';else if(s.rule==='neverD')s.cls=['B','C'][Math.floor(Math.random()*2)];else if(s.rule==='BC')s.cls=['B','C'][Math.floor(Math.random()*2)];else if(s.rule==='BCD')s.cls=['B','C','D'][Math.floor(Math.random()*3)];else if(s.rule==='DfromF4')s.cls=newY>=4?'D':s.initial;
+ }else{
+  let rank=1+Math.floor(Math.random()*120);s.rank=rank;s.cls=cl(rank);
+ }
+ log(`升上中${newY}。新學年重新編班，你進入${s.cls}班。社別仍然是${s.house}。`);
+ if(newY===4){log('升上高中，需要適應選修科及新高中課程。');s.subjects=['中文','英文','數學','通識教育','選修科一','選修科二']}
+ if(newY===6){log('中六最後一年開始，DSE倒數正式展開。')}
+ render();
+}
+function randomEvent(){
+ const pool=[
+ ['小測來臨','老師宣布下星期有小測。你需要平衡溫習與休息。',()=>{s.stats.study=Math.min(100,s.stats.study+2)}],
+ ['朋友邀請','有同學邀請你放學後一起吃東西。',()=>{s.stats.social=Math.min(100,s.stats.social+2);s.money=Math.max(0,s.money-20)}],
+ ['運動練習','校隊正在招募新成員，你獲邀參加試練。',()=>{s.stats.health=Math.min(100,s.stats.health+3)}],
+ ['家庭提醒','家人提醒你注意學業與作息。',()=>{s.stats.mood=Math.max(0,s.stats.mood-1);s.stats.study=Math.min(100,s.stats.study+1)}],
+ ['社際活動','你代表所屬社參與活動，為社別取得積分。',()=>{s.housePoints+=10;s.stats.social=Math.min(100,s.stats.social+2)}]
+ ];
+ let p=pool[Math.floor(Math.random()*pool.length)];p[2]();log(`隨機事件「${p[0]}」：${p[1]}`);render();
+}
+function showDSEnd(){showEvent('normal');log('2018年HKDSE考試階段完成。你即將迎來放榜及人生下一個選擇。')}
+function showEnding(){
+ const score=Math.round((s.grade+s.stats.study)/2),discipline=s.stats.discipline;
+ let result=score>=80?'本地大學升學路線':score>=65?'自資學士／副學士升學路線':score>=50?'高級文憑／職業訓練路線':'重考、就業或其他升學路線';
+ $('modalContent').innerHTML=`<h2 class="pixel">THE END · 2018</h2><div class="ending"><b>${s.name} 的六年中學生涯結束。</b><p>畢業班別：中六${s.cls}班</p><p>學業綜合表現：${score}</p><p>健康：${s.stats.health}｜人際：${s.stats.social}｜紀律紀錄：${discipline}</p><p><b>模擬畢業方向：${result}</b></p><p>這是遊戲內的模擬結局，並非真實DSE成績或院校錄取保證。</p></div><p>你可以查看六年紀錄，或重新開始另一段人生。</p>`;
+ $('modal').classList.remove('hidden');
+}
+function renderPeople(){
+ const list=[...npc,...Object.entries(cameo).map(([name,c])=>({name,cls:c.initial,desc:c.desc+'（彩蛋角色）'}))];
+ $('roster').innerHTML=list.map(p=>`<div class="person"><b>${p.name} · ${p.cls}班</b><span>${p.desc}</span></div>`).join('');
+}
+function buildCalendar(){
+ const rows=[['9月','開學禮、新生適應、分班及社別'],['10月','學會招募、社際活動'],['11月','測驗、校內比賽'],['12月','聖誕活動、上學期考試'],['1月','下學期開始、學習檢討'],['2月','農曆新年及假期活動'],['3月','陸運會、球類比賽'],['4月','復活節假期、考試準備'],['5月','年終考試及校內活動'],['6月','考試、畢業及學年總結'],['7月','派成績表、升班及暑假']];
+ $('calendarList').innerHTML=rows.map(r=>`<div class="kv"><b>${r[0]}</b><span>${r[1]}</span></div>`).join('');
+}
+function renderYearbook(){
+ $('yearbook').innerHTML=(s.yearHistory||[]).map(x=>`<div class="person"><b>${x.year-2011}年級 · ${x.year}</b><span>年度平均 ${x.grade}｜班別 ${x.cls}班｜社際積分 ${x.housePoints}</span></div>`).join('')||'<p class="muted">完成第一個學年後，這裡會保存年度紀錄。</p>';
+}
+function save(){if(!s)return;localStorage.setItem('sixyears_full_save',JSON.stringify(s));toast('進度已儲存在此瀏覽器')}
+function load(){let raw=localStorage.getItem('sixyears_full_save');if(!raw){toast('沒有找到儲存進度');return}try{s=JSON.parse(raw);s.date=new Date(s.date);$('setup').classList.add('hidden');$('game').classList.remove('hidden');render();renderLogs();renderPeople();buildCalendar();renderYearbook();showEvent('normal');toast('已載入進度')}catch(e){toast('存檔讀取失敗')}}
+function reset(){if(confirm('確定重新開始？目前遊戲進度會被清除。')){localStorage.removeItem('sixyears_full_save');location.reload()}}
+$('startBtn').addEventListener('click',start);$('nextDay').addEventListener('click',nextDay);$('saveBtn').addEventListener('click',save);$('loadBtn').addEventListener('click',load);$('resetBtn').addEventListener('click',reset);
+$('actionButtons').addEventListener('click',e=>{let b=e.target.closest('[data-action]');if(b)action(b.dataset.action)});
+$('currentEvent').addEventListener('click',e=>{let b=e.target.closest('[data-evchoice]');if(b)resolveEvent(+b.dataset.evchoice)});
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['actions','people','calendar','record'].forEach(k=>$('tab-'+k).classList.toggle('hidden',k!==b.dataset.tab))}));
+$('modalClose').addEventListener('click',()=>$('modal').classList.add('hidden'));
+</script>
+</body></html>

@@ -45,7 +45,7 @@ button,input,select{font:inherit}button{border:3px solid var(--line);border-radi
   <div class="weekhead"><div><h2 style="margin:0">本週校園事件</h2><div class="muted" id="weekSummary">每週 5–8 件事，選擇你的應對方式。</div></div><span class="tag" id="weekProgress">事件 1 / 6</span></div>
   <div class="pixel-scene"><div class="sun"></div><div class="cloud"></div><div class="school"></div></div>
   <div id="currentEvent" class="event"></div>
-  <div class="weekfooter"><span class="muted" id="weekHint">選擇一個選項即可推進事件。</span><button class="primary" id="nextWeek" disabled>完成本週，進入下一週 ▶</button></div>
+  <div class="weekfooter"><span class="muted" id="weekHint">故事自動發展；重大決定時會暫停。</span><button id="autoBtn">⏸ 暫停自動播放</button><button class="primary" id="nextWeek">下一週 ▶</button></div>
  </main>
  <section class="summarygrid">
   <div class="panel"><h2>PLAYER STATUS</h2><div class="profile"><div class="avatar" id="avatar">🎒</div><div><div class="name" id="profileName">學生</div><div class="muted" id="profileClass">中一 A班</div><span class="tag" id="houseTag">仁社</span></div></div><div id="stats"></div></div>
@@ -91,39 +91,61 @@ f5book:{title:'違規物品事件',body:'中五時，卓頌賢發起帶色情書
 f5chair:{title:'訓導室衝突',body:'在後續與訓導老師的衝突中，卓頌賢掟椅，事件造成安全風險並帶來進一步紀律後果。',choices:[['保持距離，避免衝突升級','health',3],['支持老師按程序處理','discipline',1],['事後關心受影響同學','social',4]]},
 f6mock:{title:'校外模擬考試',body:'校外模擬考試期間，吳子龍遇上尷尬的生理反應，成為同學之間的話題。尊重別人私隱，不以身體或外貌羞辱任何人。',choices:[['不加入取笑，轉移話題','social',5],['提醒朋友尊重私隱','mood',4],['專心準備自己的考試','study',3]]}
 };
-let s=null;
+let s=null,autoTimer=null,autoEnabled=true;
+const dailyStories=[
+ ["早上回到課室","你比平日早了一點回校，走廊還未熱鬧起來。","mood"],
+ ["小息閒談","小息時，幾位同學圍在一起談論最近的校園話題。","social"],
+ ["課堂突擊提問","老師突然請你回答問題，你整理思緒後作出回應。","study"],
+ ["午飯時間","午飯時你和同學交換了最近的生活近況。","social"],
+ ["放學後的操場","操場傳來球隊練習的聲音，你停下來看了一會。","health"],
+ ["功課與測驗","幾份功課和小測安排在同一星期，你開始調整自己的時間。","study"],
+ ["巴士上的偶遇","放學回家途中，你遇到一位熟悉的同學，聊了幾句。","social"],
+ ["社團準備","學會正在準備活動，大家分工合作，忙得不可開交。","mood"],
+ ["老師的提醒","老師提醒全班留意最近的學習進度和課堂表現。","study"],
+ ["雨天放學","突然下起大雨，同學們在校門附近等雨勢減弱。","mood"],
+ ["球場上的比賽","班際球賽進入白熱化階段，場邊同學不斷打氣。","health"],
+ ["課室小插曲","課室發生一件令人忍俊不禁的小插曲，沉悶氣氛頓時消失。","mood"],
+ ["圖書館的一節","你在圖書館度過一段安靜時間，順便完成了部分溫習。","study"],
+ ["同學之間的誤會","兩位同學因一句說話產生誤會，其他人都察覺到氣氛不太對勁。","social"],
+ ["回家後的晚上","回家後，你終於有時間整理書包，也想起今天發生的幾件小事。","health"],
+ ["校園廣播","午間廣播公布了近期活動安排，大家開始討論參加哪一項。","social"],
+ ["小組報告","小組報告進度比預期慢，組員重新分配工作。","study"],
+ ["週末的訊息","週末有同學傳來訊息，問你要不要一起外出。","social"],
+ ["家中的晚餐","晚餐時家人問起學校近況，你分享了一些最近發生的事。","mood"],
+ ["考試後的走廊","考試結束後，走廊上充滿對答案和討論題目的聲音。","mood"]
+];
+const majorChoices=[
+ {title:"友情與圈子",body:"最近你和幾位同學走得很近，但另一群朋友似乎因此疏遠了你。你開始思考自己想成為怎樣的人。",a:["主動維繫不同朋友，不把自己局限在一個圈子","跟最合得來的一群朋友站在一起"],effects:[{social:8,mood:3},{social:3,mood:1}]},
+ {title:"學業方向",body:"成績表反映出你的強弱項。老師認為你有潛力，但你必須決定接下來把時間放在哪裡。",a:["把重心放在學業，爭取更好的成績","不想只顧讀書，保留時間發展興趣"],effects:[{study:9,mood:-2},{mood:7,social:3}]},
+ {title:"一次衝突",body:"朋友捲入一場爭執，對方希望你幫忙說話。你知道這件事可能令朋友圈出現裂痕。",a:["先了解事實，再嘗試調停","不介入爭執，避免令事情擴大"],effects:[{social:7,discipline:0},{health:3,mood:2}]},
+ {title:"課外活動的機會",body:"一項重要校園活動正在招募核心成員。參與可能帶來新朋友和經驗，也會佔用不少時間。",a:["接受挑戰，加入籌備團隊","婉拒邀請，先照顧自己的生活節奏"],effects:[{social:8,mood:4,health:-3},{health:5,study:2}]},
+ {title:"面對自己的不足",body:"一次失誤令你很在意。你可以選擇正面處理，也可以暫時把注意力放到其他事情上。",a:["承認問題，訂下改善目標","先放下壓力，等自己準備好再處理"],effects:[{study:6,mood:2},{mood:6,health:3}]},
+ {title:"升學與未來",body:"升學話題開始變得真實。身邊的人各有打算，你也需要想一想自己想走的方向。",a:["訂立清晰目標，為未來作準備","先探索不同可能，不急於定下方向"],effects:[{study:7,mood:-1},{mood:5,social:3}]}
+];
+const monthlyStories=[
+ {title:"月度特發｜校園流言",body:"一則關於學生和老師的傳聞在校園流傳。不同版本越傳越誇張，連原本不相關的人也被牽涉其中。",effect:{mood:-3,social:2}},
+ {title:"月度特發｜突如其來的機會",body:"學校臨時增加一個大型活動名額，你的班級獲邀參與。這次經驗可能成為今年令人難忘的一頁。",effect:{social:4,mood:3}},
+ {title:"月度特發｜考試成績公布",body:"最近一次測驗成績公布。有人考得比預期好，也有人需要重新調整讀書方法。",effect:{study:3,mood:-1}},
+ {title:"月度特發｜校隊傳來消息",body:"校隊在比賽中取得令人意外的成績，校園裡的氣氛變得熱烈，大家開始談論下一場比賽。",effect:{health:3,social:3}},
+ {title:"月度特發｜班級活動",body:"班主任提出舉辦班級活動，希望同學們放下平日的競爭，好好相處一次。",effect:{social:5,mood:3}},
+ {title:"月度特發｜家中變化",body:"家中最近有些事情需要你分擔。你開始明白，學校以外的生活也會影響自己的心情。",effect:{mood:-2,health:-1}},
+ {title:"月度特發｜校園安全提醒",body:"校方因近期事件再次提醒學生注意安全及尊重界線。老師亦鼓勵同學遇到困難時尋求可信任的成人協助。",effect:{discipline:0,mood:2}},
+ {title:"月度特發｜難忘的一天",body:"一次平凡的校園活動意外地順利。放學後，你發現自己竟然記住了許多細節，也許這會成為六年回憶的一部分。",effect:{mood:6,social:2}}
+];
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
 function cl(rank){return rank<=30?'A':rank<=60?'B':rank<=90?'C':'D'}
 function yr(){return Math.max(1,Math.min(6,s.date.getFullYear()-2012+(s.date.getMonth()>=8?1:0)))}
 function dt(d=s.date){return `${d.getFullYear()}年${d.getMonth()+1}月`}
 function toast(t){let e=$('toast');e.textContent=t;e.classList.remove('hidden');setTimeout(()=>e.classList.add('hidden'),1800)}
-function log(t){s.logs.unshift({date:dt(),text:t});s.logs=s.logs.slice(0,30);renderLogs()}
+function log(t){s.logs.unshift({date:dt(),text:t});s.logs=s.logs.slice(0,80);renderLogs()}
 function randomHouse(){return houses[Math.floor(Math.random()*4)]}
 function rankFor(c){let a={A:[1,30],B:[31,60],C:[61,90],D:[91,120]}[c];return a[0]+Math.floor(Math.random()*30)}
-function pick(a){return a[Math.floor(Math.random()*a.length)]}
-const weeklyPool=[
- {title:'課堂小測',body:'老師宣布下星期有小測。你會怎樣準備？',opts:[['安排溫習時間','study'],['和同學組成溫習小組','social'],['先休息好再準備','health']]},
- {title:'朋友邀請',body:'同學邀請你放學後一起吃東西，聊聊最近的校園生活。',opts:[['答應邀請，一起聚餐','social'],['婉拒，留在學校溫習','study'],['邀請其他同學一起參加','mood']]},
- {title:'運動練習',body:'校隊正在招募新成員，你獲邀參加試練。',opts:[['參加訓練','health'],['邀請朋友一起參加','social'],['把時間留給學業','study']]},
- {title:'家庭提醒',body:'家人提醒你注意學業與作息，你需要平衡不同事情。',opts:[['調整作息及溫習計劃','study'],['與家人好好溝通','mood'],['安排時間休息','health']]},
- {title:'社際活動',body:'你代表所屬社參與活動，有機會為社別取得積分。',opts:[['積極參與比賽','health'],['協助籌備及組織','social'],['負責資料及文書工作','study']]},
- {title:'學會招募',body:'不同學會正在招募新成員，你對其中一個活動很感興趣。',opts:[['加入學會認識新朋友','social'],['嘗試擔任活動工作人員','mood'],['先了解活動內容再決定','study']]},
- {title:'考試壓力',body:'考試週逐漸接近，身邊同學都開始緊張。',opts:[['制定溫習計劃','study'],['找朋友互相支持','social'],['安排休息及運動','health']]},
- {title:'校園義工',body:'學校招募義工協助活動，你考慮是否參加。',opts:[['報名協助活動','social'],['負責活動資料整理','study'],['邀請朋友一同參與','mood']]},
- {title:'課外活動日',body:'學校舉辦課外活動日，你可以選擇參與不同項目。',opts:[['參加體能活動','health'],['參加表演或創作活動','mood'],['與同學合作完成任務','social']]},
- {title:'同學需要幫忙',body:'一位同學遇到困難，向你尋求意見。',opts:[['主動提供協助','social'],['陪他找老師或社工','mood'],['幫忙整理問題及解決方法','study']]}
-];
-function makeEvent(){
- let specialKeys=Object.keys(events);
- let useSpecial=Math.random()<.16;
- if(useSpecial){let key=pick(specialKeys);let ev=events[key];return {title:ev.title,body:ev.body,opts:ev.choices.map(c=>[c[0],c[1]==='discipline'?'discipline':c[1]]) ,special:true};}
- return {...pick(weeklyPool),special:false};
-}
-function makeWeek(){
- let count=5+Math.floor(Math.random()*4),arr=[];
- for(let i=0;i<count;i++)arr.push(makeEvent());
- s.weekEvents=arr;s.weekIndex=0;s.weekNumber=(s.weekNumber||0)+1;
- log(`第${s.weekNumber}週開始，本週共有${count}個隨機事件。`);
- renderEvent();
+function applyEffects(effects){
+ for(const [k,v] of Object.entries(effects)){
+  if(k==='discipline')s.stats.discipline=Math.max(0,s.stats.discipline+v);
+  else s.stats[k]=Math.max(0,Math.min(100,s.stats[k]+v));
+ }
+ s.grade=Math.max(0,Math.min(100,s.grade+(effects.study||0)*.12));
 }
 function start(){
  const name=$('playerName').value.trim();if(!name){toast('請輸入角色姓名');return}
@@ -131,13 +153,17 @@ function start(){
  let rank=1+Math.floor(Math.random()*120),initial=special?special.initial:cl(rank);
  if(special)rank=rankFor(initial);
  const gender=special?special.gender:$('gender').value;
- s={name,gender,birthday,rank,initial,cls:initial,house:randomHouse(),date:new Date(2012,8,3),stats:{study:50,health:82,mood:72,social:35,discipline:0},grade:50,money:500,housePoints:0,logs:[],mode:special?'彩蛋模式':'自由模式',cameo:special?.id||null,rule:special?.rule||null,desc:special?.desc||'',yearHistory:[],flags:{},subjects:['中文','英文','數學','通識教育'],dse:{},weekNumber:0,weekEvents:[],weekIndex:0};
+ s={name,gender,birthday,rank,initial,cls:initial,house:randomHouse(),date:new Date(2012,8,3),
+ stats:{study:50,health:82,mood:72,social:35,discipline:0},grade:50,money:500,housePoints:0,
+ logs:[],mode:special?'彩蛋模式':'自由模式',cameo:special?.id||null,rule:special?.rule||null,
+ desc:special?.desc||'',yearHistory:[],weekNumber:0,dayNumber:0,lastMonthlyKey:'',
+ lastMajorWeek:0,majorPending:false,majorCount:0,storyHistory:[]};
  $('setup').classList.add('hidden');$('game').classList.remove('hidden');
- log('你正式成為仁濟醫院王華湘中學的中一新生。');
- log(special?`姓名完全符合${special.id}｜${name}，自動進入彩蛋模式。`:`系統隨機生成入學試排名第${rank}，分配至中一${initial}班。`);
- log(`性別：${gender}；所屬社別：${s.house}。`);
- if(special)log(`角色設定：${special.desc}`);
- makeWeek();render();renderPeople();
+ log('2012年9月。你正式成為仁濟醫院王華湘中學的中一新生。六年的故事開始了。');
+ log(special?`你以${special.id}角色設定進入故事。`:`入學排名第${rank}，被分配至中一${initial}班。`);
+ log(`你屬於${s.house}。新課室、新同學，一切仍然陌生。`);
+ runWeek();
+ setAuto(true);
 }
 function render(){
  let y=yr();
@@ -150,53 +176,90 @@ function render(){
  $('stats').innerHTML=Object.entries(labels).map(([k,label])=>{let v=s.stats[k],pct=k==='discipline'?Math.min(100,v*14):v,clsx=k==='discipline'?(v>=5?'bad':v>=2?'warn':''):(v<35?'bad':v<60?'warn':'');return `<div class="stat"><div class="statline"><span>${label}</span><b>${k==='discipline'?v:v+'/100'}</b></div><div class="bar"><div class="fill ${clsx}" style="width:${pct}%"></div></div></div>`}).join('');
  renderLogs();
 }
-function renderLogs(){$('feed').innerHTML=s.logs.slice(0,10).map(x=>`<div class="log"><time>${x.date}</time>${x.text}</div>`).join('')}
-function renderEvent(){
- const ev=s.weekEvents[s.weekIndex],total=s.weekEvents.length;
- $('weekProgress').textContent=`事件 ${Math.min(s.weekIndex+1,total)} / ${total}`;
- $('weekHint').textContent=`已完成 ${s.weekIndex} / ${total} 件事件`;
- $('nextWeek').disabled=s.weekIndex<total;
- if(!ev){$('currentEvent').innerHTML='<h3>本週事件已完成！</h3><p>按下方按鈕結算本週並進入下一週。</p>';return}
- $('currentEvent').innerHTML=`<div class="eventtime">${dt()} · 第${s.weekNumber}週 · 事件 ${s.weekIndex+1}/${total}</div><h3>${ev.title}</h3><p>${ev.body}</p><div class="choices">${ev.opts.map((c,i)=>`<button data-choice="${i}"><b>${'ABC'[i]}</b>${c[0]}</button>`).join('')}</div>`;
+function renderLogs(){$('feed').innerHTML=s.logs.slice(0,12).map(x=>`<div class="log"><time>${x.date}</time>${x.text}</div>`).join('')}
+function renderStoryCard(title,body,meta='故事自動發展'){
+ $('currentEvent').innerHTML=`<div class="eventtime">${dt()} · ${meta}</div><h3>${title}</h3><p>${body}</p>`;
 }
-function resolveChoice(i){
- const ev=s.weekEvents[s.weekIndex];if(!ev)return;
- const choice=ev.opts[i],key=choice[1];
- const statKey=key==='discipline'?'discipline':(['study','health','mood','social'].includes(key)?key:pick(['study','health','mood','social']));
- let amount=statKey==='discipline'?(Math.random()<.18?1:0):(2+Math.floor(Math.random()*8));
- // Choices have a likely benefit, but outcomes vary each time.
- if(statKey==='discipline')s.stats.discipline=Math.max(0,s.stats.discipline+amount);
- else s.stats[statKey]=Math.max(0,Math.min(100,s.stats[statKey]+amount));
- const sideEffects=['study','health','mood','social'].filter(k=>k!==statKey);
- if(Math.random()<.38){let side=pick(sideEffects),delta=Math.random()<.65?1+Math.floor(Math.random()*3):-1-Math.floor(Math.random()*3);s.stats[side]=Math.max(0,Math.min(100,s.stats[side]+delta));}
- if(statKey==='study')s.grade=Math.max(0,Math.min(100,s.grade+amount*.12));
- if(statKey==='social'&&Math.random()<.25)s.housePoints+=Math.floor(Math.random()*6)+1;
- if(Math.random()<.12)s.money=Math.max(0,s.money+(Math.random()<.5?20:-20));
- log(`「${ev.title}」選擇：${choice[0]}。結果：${statKey==='discipline'?'紀律':({study:'學業',health:'健康',mood:'心情',social:'人際'}[statKey])}${amount?` +${amount}`:'沒有紀律扣分'}。`);
- s.weekIndex++;render();renderEvent();
+function runWeek(){
+ if(!s)return;
+ s.weekNumber++;
+ const weekStart=new Date(s.date);
+ const stories=[];
+ for(let i=0;i<5;i++){
+  const day=pick(dailyStories),stat=day[2],gain=1+Math.floor(Math.random()*3);
+  s.stats[stat]=Math.max(0,Math.min(100,s.stats[stat]+gain));
+  if(Math.random()<.22){const side=pick(['study','health','mood','social'].filter(k=>k!==stat));s.stats[side]=Math.max(0,Math.min(100,s.stats[side]+(Math.random()<.7?1:-1)));}
+  const line=`${day[0]}：${day[1]}`;
+  stories.push(line);log(line);
+  s.dayNumber++;
+ }
+ s.storyHistory.push({week:s.weekNumber,date:dt(weekStart),stories});
+ if(s.weekNumber%13===0){
+  s.yearHistory.push({year:weekStart.getFullYear(),grade:Math.round(s.grade),cls:s.cls,housePoints:s.housePoints});
+  log(`學期小結：學業平均 ${Math.round(s.grade)}，人際狀態 ${s.stats.social}。`);
+ }
+ // Exactly one special incident when the simulated calendar enters a new month.
+ const monthKey=`${s.date.getFullYear()}-${s.date.getMonth()}`;
+ if(monthKey!==s.lastMonthlyKey){
+  s.lastMonthlyKey=monthKey;
+  const special=pick(monthlyStories);applyEffects(special.effect);
+  log(`${special.title}：${special.body}`);
+  s.storyHistory.push({week:s.weekNumber,date:dt(),stories:[`${special.title}：${special.body}`]});
+ }
+ renderStoryCard(`第${s.weekNumber}週｜校園日常`,stories.join(' '),'5 個日常片段');
+ $('weekProgress').textContent=`第 ${s.weekNumber} 週`;
+ $('weekHint').textContent='日常事件已自動發展；重大決定會暫停等待你。';
+ render();
+ // A major decision appears every two weeks, after the second week's story.
+ if(s.weekNumber%2===0 && s.lastMajorWeek!==s.weekNumber){
+  s.lastMajorWeek=s.weekNumber;
+  stopAuto();
+  showMajorDecision();
+ }
 }
-function finishWeek(){
- if(s.weekIndex<s.weekEvents.length)return;
+function showMajorDecision(){
+ const d=pick(majorChoices);s.majorPending=true;s.majorCount++;
+ $('weekProgress').textContent=`重大決定 ${s.majorCount}`;
+ $('weekHint').textContent='故事暫停：這個選擇會影響接下來的人生。';
+ $('currentEvent').innerHTML=`<div class="eventtime">${dt()} · 重大決定 · 第${s.majorCount}次</div><h3>${d.title}</h3><p>${d.body}</p><div class="choices"><button data-major="0"><b>A</b>${d.a[0]}</button><button data-major="1"><b>B</b>${d.a[1]}</button></div>`;
+ s.pendingDecision=d;
+}
+function resolveMajor(i){
+ if(!s?.majorPending)return;
+ const d=s.pendingDecision,choice=d.a[i],effects=d.effects[i];
+ applyEffects(effects);s.majorPending=false;s.pendingDecision=null;
+ log(`【重大決定】${d.title}：你選擇「${choice}」。這個決定將成為往後故事的一部分。`);
+ renderStoryCard('你的選擇已經改變故事',`你選擇了「${choice}」。接下來的日常將沿著這條路發展。`,'重大決定已記錄');
+ render();setAuto(true);
+}
+function advanceWeek(){
+ if(!s||s.majorPending)return;
  s.date.setDate(s.date.getDate()+7);
- s.stats.health=Math.min(100,s.stats.health+2);
- s.stats.mood=Math.min(100,s.stats.mood+2);
- s.grade=Math.max(0,Math.min(100,s.grade+(s.stats.study-50)*.015));
- if(s.date.getMonth()===8&&s.date.getDate()<=7&&s.date.getFullYear()>2012)promote();
- if(s.date.getFullYear()===2018&&s.date.getMonth()>=5){showEnding();return}
- if(s.weekNumber%13===0){s.yearHistory.push({year:s.date.getFullYear(),grade:Math.round(s.grade),cls:s.cls,housePoints:s.housePoints});s.housePoints=0;log(`學期總結：目前學業平均 ${Math.round(s.grade)}。`)}
- makeWeek();render();
+ s.stats.health=Math.min(100,s.stats.health+1);
+ s.stats.mood=Math.min(100,s.stats.mood+1);
+ s.grade=Math.max(0,Math.min(100,s.grade+(s.stats.study-50)*.01));
+ if(s.date.getMonth()===8&&s.date.getDate()<=14&&s.date.getFullYear()>2012)promote();
+ if(s.date.getFullYear()>=2018&&s.date.getMonth()>=5){stopAuto();showEnding();return}
+ runWeek();
 }
 function promote(){
- let newY=yr();if(newY>6)return;
- if(s.rule==='D')s.cls='D';else if(s.rule==='C')s.cls='C';else if(s.rule==='neverD')s.cls=['B','C'][Math.floor(Math.random()*2)];else if(s.rule==='BC')s.cls=['B','C'][Math.floor(Math.random()*2)];else if(s.rule==='BCD')s.cls=['B','C','D'][Math.floor(Math.random()*3)];else if(s.rule==='DfromF4')s.cls=newY>=4?'D':s.initial;else{let rank=1+Math.floor(Math.random()*120);s.rank=rank;s.cls=cl(rank)}
- log(`升上中${newY}，你進入${s.cls}班。`);
- if(newY===4){log('升上高中，需要適應選修科及新高中課程。');s.subjects=['中文','英文','數學','通識教育','選修科一','選修科二']}
- if(newY===6)log('中六最後一年開始，DSE倒數正式展開。');
+ let newY=yr();
+ if(s.rule==='D')s.cls='D';else if(s.rule==='C')s.cls='C';else if(s.rule==='neverD'||s.rule==='BC')s.cls=pick(['B','C']);else if(s.rule==='BCD')s.cls=pick(['B','C','D']);else if(s.rule==='DfromF4')s.cls=newY>=4?'D':s.initial;else{let rank=1+Math.floor(Math.random()*120);s.rank=rank;s.cls=cl(rank)}
+ log(`新學年開始。你升上中${newY}，重新適應${s.cls}班的生活。`);
+ if(newY===4)log('升上高中，選修科、學習壓力和朋友圈都出現變化。');
+ if(newY===6)log('中六開始。DSE、升學和離別逐漸成為大家的話題。');
 }
+function setAuto(on){
+ autoEnabled=on;
+ $('autoBtn').textContent=on?'⏸ 暫停自動播放':'▶ 繼續自動播放';
+ if(autoTimer){clearInterval(autoTimer);autoTimer=null}
+ if(on&&!s?.majorPending)autoTimer=setInterval(advanceWeek,6500);
+}
+function stopAuto(){setAuto(false)}
 function showEnding(){
  const score=Math.round((s.grade+s.stats.study)/2),discipline=s.stats.discipline;
  let result=score>=80?'本地大學升學路線':score>=65?'自資學士／副學士升學路線':score>=50?'高級文憑／職業訓練路線':'重考、就業或其他升學路線';
- $('modalContent').innerHTML=`<h2 class="pixel">THE END · 2018</h2><div class="ending"><b>${s.name} 的六年中學生涯結束。</b><p>畢業班別：中六${s.cls}班</p><p>學業綜合表現：${score}</p><p>健康：${s.stats.health}｜人際：${s.stats.social}｜紀律紀錄：${discipline}</p><p><b>模擬畢業方向：${result}</b></p><p>這是遊戲內的模擬結局，並非真實DSE成績或院校錄取保證。</p></div><p>你可以查看六年紀錄，或重新開始另一段人生。</p>`;
+ $('modalContent').innerHTML=`<h2 class="pixel">THE END · 2018</h2><div class="ending"><b>${s.name} 的六年中學生涯結束。</b><p>畢業班別：中六${s.cls}班</p><p>學業綜合表現：${score}</p><p>健康：${s.stats.health}｜人際：${s.stats.social}｜紀律紀錄：${discipline}</p><p><b>模擬畢業方向：${result}</b></p><p>六年裡，你經歷了 ${s.weekNumber} 週、${s.majorCount} 次重大決定。每個選擇都留下了不同的痕跡。</p></div>`;
  $('modal').classList.remove('hidden');
 }
 function renderCalendar(){
@@ -205,11 +268,17 @@ function renderCalendar(){
 }
 function renderYearbook(){$('modalContent').innerHTML='<h2>六年紀錄</h2>'+(s.yearHistory||[]).map(x=>`<div class="person"><b>${x.year} · ${x.cls}班</b><span>年度平均 ${x.grade}｜社際積分 ${x.housePoints}</span></div>`).join('')||'<p>尚未有年度紀錄。</p>'}
 function openModal(){ $('modal').classList.remove('hidden'); }
-function save(){if(!s)return;localStorage.setItem('sixyears_weekly_save',JSON.stringify(s));toast('進度已儲存在此瀏覽器')}
-function load(){let raw=localStorage.getItem('sixyears_weekly_save');if(!raw){toast('沒有找到新版儲存進度');return}try{s=JSON.parse(raw);s.date=new Date(s.date);$('setup').classList.add('hidden');$('game').classList.remove('hidden');render();renderEvent();toast('已載入進度')}catch(e){toast('存檔讀取失敗')}}
-function reset(){if(confirm('確定重新開始？目前新版進度會被清除。')){localStorage.removeItem('sixyears_weekly_save');location.reload()}}
-$('startBtn').addEventListener('click',start);$('nextWeek').addEventListener('click',finishWeek);$('saveBtn').addEventListener('click',save);$('loadBtn').addEventListener('click',load);$('resetBtn').addEventListener('click',reset);
-$('currentEvent').addEventListener('click',e=>{let b=e.target.closest('[data-choice]');if(b)resolveChoice(+b.dataset.choice)});
+function save(){if(!s)return;const copy={...s};localStorage.setItem('sixyears_weekly_save',JSON.stringify(copy));toast('進度已儲存在此瀏覽器')}
+function load(){
+ let raw=localStorage.getItem('sixyears_weekly_save');if(!raw){toast('沒有找到新版儲存進度');return}
+ try{s=JSON.parse(raw);s.date=new Date(s.date);$('setup').classList.add('hidden');$('game').classList.remove('hidden');render();renderStoryCard('繼續你未完成的故事','故事已從上次停止的位置接續。');if(s.majorPending&&s.pendingDecision){stopAuto();const d=s.pendingDecision;$('currentEvent').innerHTML=`<div class="eventtime">${dt()} · 重大決定</div><h3>${d.title}</h3><p>${d.body}</p><div class="choices"><button data-major="0"><b>A</b>${d.a[0]}</button><button data-major="1"><b>B</b>${d.a[1]}</button></div>`;}else setAuto(true);toast('已載入進度')}catch(e){toast('存檔讀取失敗')}
+}
+function reset(){if(confirm('確定重新開始？目前進度會被清除。')){stopAuto();localStorage.removeItem('sixyears_weekly_save');location.reload()}}
+$('startBtn').addEventListener('click',start);
+$('nextWeek').addEventListener('click',()=>{if(s?.majorPending)return;advanceWeek()});
+$('autoBtn').addEventListener('click',()=>setAuto(!autoEnabled));
+$('saveBtn').addEventListener('click',save);$('loadBtn').addEventListener('click',load);$('resetBtn').addEventListener('click',reset);
+$('currentEvent').addEventListener('click',e=>{let b=e.target.closest('[data-major]');if(b)resolveMajor(+b.dataset.major)});
 $('calendarBtn').addEventListener('click',()=>{renderCalendar();openModal()});
 $('recordBtn').addEventListener('click',()=>{renderYearbook();openModal()});
 $('modalClose').addEventListener('click',()=>$('modal').classList.add('hidden'));
